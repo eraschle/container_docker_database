@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  mysql:
+    env_file: .env
+    image: mysql:5.7.17
+    restart: always
+    container_name: mysql-db
+    volumes:
+      - ../_data/mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      network:
+        aliases:
+          - mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PW}
+      MYSQL_ROOT_HOST: '%'
+
+  mssql:
+    env_file: .env
+    image: microsoft/mssql-server-linux:2017-latest
+    restart: always
+    container_name: mssql-db
+    #volumes:
+    #  - "../../data/mssql:/var/opt/mssql/"
+    ports:
+      - 1433:1433
+    networks:
+      network:
+        aliases:
+          - mssql
+    environment:
+      SA_PASSWORD: ${DB_ROOT_PW}
+      MSSQL_PID: Express
+      ACCEPT_EULA: Y
+
+networks:
+  network:
+    driver: bridge
